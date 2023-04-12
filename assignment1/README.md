@@ -1,1 +1,1 @@
-This folder should contain the apps folder created by py4web
+This folder has the homework Files for assignment1. We create a basic weebsite with basic html and CSS. We use the Bulma FrameWork
