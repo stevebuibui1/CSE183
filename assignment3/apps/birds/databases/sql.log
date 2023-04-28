@@ -1,0 +1,57 @@
+timestamp: 2023-04-20T13:14:02.916919
+CREATE TABLE "auth_user"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "username" CHAR(512) UNIQUE,
+    "email" CHAR(512) UNIQUE,
+    "password" CHAR(512),
+    "first_name" CHAR(512),
+    "last_name" CHAR(512),
+    "sso_id" CHAR(512),
+    "action_token" CHAR(512),
+    "last_password_change" TIMESTAMP,
+    "past_passwords_hash" TEXT
+);
+success!
+timestamp: 2023-04-20T13:14:02.924919
+CREATE TABLE "auth_user_tag_groups"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "tagpath" CHAR(512),
+    "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE ON UPDATE CASCADE  
+);
+success!
+timestamp: 2023-04-27T18:50:36.132607
+CREATE TABLE "bird"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "bird" CHAR(512),
+    "weight" INTEGER,
+    "diet" CHAR(512),
+    "habitat" CHAR(512),
+    "n_sightings" INTEGER,
+    "user_email" CHAR(512)
+);
+success!
+timestamp: 2023-04-27T19:43:12.015004
+ALTER TABLE "bird" ADD "n_sightings" INTEGER;
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+timestamp: 2023-04-27T19:56:37.521275
+ALTER TABLE "bird" ADD "count" INTEGER;
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!

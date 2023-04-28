@@ -1,1 +1,1 @@
-This folder should contain the apps folder created by py4web
+This folder contains an add, delete and edit button for the website using py4web
