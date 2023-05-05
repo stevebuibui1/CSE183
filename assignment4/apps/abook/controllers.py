@@ -9,7 +9,7 @@ from .common import T, auth, cache, db, session, signed_url, logger,flash, Field
 
 url_signer = URLSigner(session)
 
-
+#hello
 @action("index")
 #index.html in front so I still have log in
 @action.uses("index.html", auth.user, url_signer)
