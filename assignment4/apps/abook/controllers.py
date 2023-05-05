@@ -1,11 +1,11 @@
 import uuid
 
-from py4web import URL, Field, abort, action, redirect, request
+from py4web import URL, Field, action, redirect
 from py4web.utils.form import Form, FormStyleBulma
 from py4web.utils.url_signer import URLSigner
 
 from .models import get_user_email
-from .common import T, auth, cache, db, session, signed_url, logger,flash, Field, authenticated, unauthenticated
+from .common import auth, db, session, Field
 
 url_signer = URLSigner(session)
 
@@ -15,17 +15,17 @@ url_signer = URLSigner(session)
 @action.uses("index.html", auth.user, url_signer)
 def index():
    # We read all the contact rows as a list (see below).
-    rows = db(db.contact.user_email == get_user_email()).select()
-    rows = rows.as_list()
+    rows = db(db.contact.user_email == get_user_email()).select().as_list()
+    
    # and then we iterate on each one, to add the phone numbers for the contact.
     for row in rows:
       # empty s string
         s = ""
-        #select phone in row
+        #querey phone to contact
         row_p = db(db.phone.contact_id == row["id"]).select()
         #iterate through the row of phones and append
         for phone in row_p:
-            s = s + phone.phone_Number + ' (' + phone.phone_Name + '), '
+            s = s + phone.phone_Number + "(" + phone.phone_Name + "), "
         #put in dictionary
         row["phone_Numbers"] = s
         
@@ -36,7 +36,7 @@ def index():
     )
 
 #edit contact
-@action('edit/<contact_id:int>', method=["GET", "POST"])
+@action('edit/<contact_id>', method=["GET", "POST"])
 @action.uses('edit.html',db, session, auth.user,  url_signer.verify())
 def edit(contact_id = None):
     assert contact_id is not None
@@ -62,7 +62,7 @@ def add():
     return dict(form = form)
 
 #delete contact
-@action('delete/<contact_id:int>', method=["GET", "POST"])
+@action('delete/<contact_id>', method=["GET", "POST"])
 @action.uses(db, session, auth.user)
 def delete(contact_id = None):
 
@@ -73,7 +73,7 @@ def delete(contact_id = None):
     redirect(URL("index"))
 
 #add phone
-@action('add_phones/<contact_id:int>', method=["GET", "POST"])
+@action('add_phones/<contact_id>', method=["GET", "POST"])
 @action.uses('add_phones.html', auth.user, session)
 def add_phone(contact_id = None):
     assert contact_id is not None
@@ -94,7 +94,7 @@ def add_phone(contact_id = None):
     return dict(name=phonename, form=form)
 
 #edit phone
-@action('edit_phones/<contact_id:int>', method=["GET", "POST"])
+@action('edit_phones/<contact_id>', method=["GET", "POST"])
 @action.uses('edit_phones.html',db, auth.user )
 def edit_phone(contact_id=None):
     assert contact_id is not None
@@ -105,7 +105,7 @@ def edit_phone(contact_id=None):
       
     return dict(rows = rows, contact= contact, url_signer= url_signer)
 #edit phones
-@action('edit_Phone/<contact_id:int>/<phone_id:int>', method=["GET", "POST"])
+@action('edit_Phone/<contact_id>/<phone_id>', method=["GET", "POST"])
 @action.uses('edit_Phone.html',db, auth.user )
 def edit_phones(contact_id=None, phone_id=None):
     assert contact_id is not None
@@ -120,12 +120,8 @@ def edit_phones(contact_id=None, phone_id=None):
     
     #form handler
     form = Form(
-        [Field('phone_Number'), Field('phone_Name')],
-        record=dict(phone_Number=phone.phone_Number, phone_name=phone.phone_Name), 
-        deletable=False,
-        csrf_session=session, 
-        formstyle=FormStyleBulma
-        )
+        [Field('phone_Number'), Field('phone_Name')], record=dict(phone_Number=phone.phone_Number, phone_name=phone.phone_Name),
+        deletable=False,csrf_session=session, formstyle=FormStyleBulma)
     if form.accepted: 
         db(db.phone.id == phone_id).update(
             contact_id=contact_id,
@@ -138,7 +134,8 @@ def edit_phones(contact_id=None, phone_id=None):
                 contact = contact,
                 url_signer=url_signer)
     
-@action('delete_phone/<contact_id:int>/<phone_id:int>', method=["GET", "POST"])
+#delete phone numbers
+@action('delete_phone/<contact_id>/<phone_id>', method=["GET", "POST"])
 @action.uses(db, session, auth.user, url_signer.verify())
 def delete_phones(contact_id=None, phone_id=None):
     assert contact_id is not None
@@ -146,3 +143,4 @@ def delete_phones(contact_id=None, phone_id=None):
     #delete the phone id
     db(db.phone.id == phone_id).delete()
     redirect(URL('edit_phones', contact_id))
+    

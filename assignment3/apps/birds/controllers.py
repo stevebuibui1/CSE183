@@ -28,7 +28,7 @@ def add():
     return dict(form = form)
 
 
-@action('edit/<bird_id:int>', method=["GET", "POST"])
+@action('edit/<bird_id>', method=["GET", "POST"])
 @action.uses(db, session, auth.user, 'edit.html', urlSigner.verify())
 def edit(bird_id):
     #see if bird_id works
@@ -53,7 +53,7 @@ def edit(bird_id):
     return dict(form=form)
 
 
-@action('inc/<bird_id:int>')
+@action('inc/<bird_id>')
 @action.uses(db, auth.user, session)
 def inc(bird_id):
     assert bird_id is not None
@@ -65,7 +65,7 @@ def inc(bird_id):
     redirect(URL('index'))
     return dict()
 
-@action('del/<bird_id:int>')
+@action('del/<bird_id>')
 @action.uses(db, session, auth.user)
 def delete(bird_id):
     assert bird_id is not None
