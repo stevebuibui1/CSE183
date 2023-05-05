@@ -15,6 +15,7 @@
                 <td>[[= row.phone_Number]]</td>
                 <td>[[= row.phone_Name]]</td>
                 <td>
+                    <!-- The buttons of the edit phone-->
                     <a class="button is-warning" href="[[=URL('edit_Phone', contact.id, row.id, signer=url_signer)]]">
                     <span class="icon"><i class="fa fa-edit"></i></span>
                     </a>
@@ -25,7 +26,7 @@
             </tr>
             [[pass]]
         </table>
-        
+         <!-- The buttons to go back and add-->
         <a class="button is-success" href="[[=URL('index')]]">
         <span class="icon"><i class="fa fa-backward"></i></span>
         <span>Back</span>

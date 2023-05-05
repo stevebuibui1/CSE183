@@ -15,18 +15,23 @@ def index():
     info = db(db.bird.user_email == get_user_email()).select()
     return dict(info = info, urlSigner = urlSigner)
 
+#add birds on to form
 @action('add', method=["GET", "POST"])
-@action.uses(db, session, auth.user, 'add.html')
+@action.uses('add.html',db, session, auth.user )
 def add():
+    #form function
     form = Form(db.bird, csrf_session=session, formstyle=FormStyleBulma)
     if form.accepted:
+        #go to index page
         redirect(URL('index'))
+        #send data
     return dict(form = form)
 
 
 @action('edit/<bird_id:int>', method=["GET", "POST"])
 @action.uses(db, session, auth.user, 'edit.html', urlSigner.verify())
 def edit(bird_id):
+    #see if bird_id works
     assert bird_id is not None
 
     if bird_id is None:
@@ -34,10 +39,12 @@ def edit(bird_id):
 
     bird_id = int(bird_id)
 
+    #list of birds
     bird_record = db.bird[bird_id]
     form = Form(db.bird, record=bird_record, csrf_session=session, formstyle=FormStyleBulma)
 
     if bird_record is None:
+        #go back to index page
         redirect(URL('index'))
         
     if form.accepted:
@@ -53,6 +60,7 @@ def inc(bird_id):
     if bird_id is None:
         redirect(URL('index'))
     bird = db.bird[bird_id]
+    #increment the counter
     db(db.bird.id == bird_id).update(n_sightings=(int(bird.n_sightings) + 1))
     redirect(URL('index'))
     return dict()
@@ -64,5 +72,6 @@ def delete(bird_id):
     if bird_id is None:
         redirect(URL('index'))
     bird_id = int(bird_id)
+    #delete
     db(db.bird.id == bird_id).delete()
     redirect(URL('index'))

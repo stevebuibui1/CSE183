@@ -9,6 +9,7 @@
 <div class="section">
    <!-- Put the table here -->
    <div class="section">
+      <!-- move with the scalar-->
       <div class="is-mobile">
          <h1 class = "title"><b>Bird</b></h1>
       </div>
@@ -25,6 +26,7 @@
          <th>habitat</th>
          <th>n_sightings</th>
       </tr>
+      <!-- list of items for bird db -->
       [[for item in info:]]
       <tr>
          <td>[[=item.bird]]</td>
@@ -33,6 +35,7 @@
          <td>[[=item.habitat]]</td>
          <td>[[=item.n_sightings]]</td>
          <td>
+            
             <a class="button is-success" href="[[=URL('inc', item.id, signer=urlSigner)]]">
                <span class="icon">
                   <i class="fa fa-plus"></i>
@@ -41,6 +44,7 @@
                   +1
                </span>
             </a>
+            <!-- buttons to click -->
             <a class="button" href="[[=URL('edit', item.id, signer=urlSigner)]]">
                <span class="icon"><i class="fa fa-fw fa-pencil"></i></span> <span>Edit your Entry</span>
             </a>

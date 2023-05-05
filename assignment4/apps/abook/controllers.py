@@ -9,21 +9,24 @@ from .common import T, auth, cache, db, session, signed_url, logger,flash, Field
 
 url_signer = URLSigner(session)
 
-# The auth.user below forces login.
+
 @action("index")
+#index.html in front so I still have log in
 @action.uses("index.html", auth.user, url_signer)
 def index():
+   # We read all the contact rows as a list (see below).
     rows = db(db.contact.user_email == get_user_email()).select()
     rows = rows.as_list()
-    
+   # and then we iterate on each one, to add the phone numbers for the contact.
     for row in rows:
-        
+      # empty s string
         s = ""
+        #select phone in row
         row_p = db(db.phone.contact_id == row["id"]).select()
-        
+        #iterate through the row of phones and append
         for phone in row_p:
             s = s + phone.phone_Number + ' (' + phone.phone_Name + '), '
-        
+        #put in dictionary
         row["phone_Numbers"] = s
         
     return dict(
@@ -37,13 +40,11 @@ def index():
 @action.uses('edit.html',db, session, auth.user,  url_signer.verify())
 def edit(contact_id = None):
     assert contact_id is not None
-
+    #contact info in model
     p = db.contact[contact_id]
     if p is None:
         redirect(URL('index'))
-
-   
-
+    #form handler
     form = Form(db.contact, record=p, csrf_session=session, deletable=False, formstyle=FormStyleBulma)
 
     if form.accepted:
@@ -59,6 +60,7 @@ def add():
     if form.accepted:
         redirect(URL('index'))
     return dict(form = form)
+
 #delete contact
 @action('delete/<contact_id:int>', method=["GET", "POST"])
 @action.uses(db, session, auth.user)
@@ -96,7 +98,7 @@ def add_phone(contact_id = None):
 @action.uses('edit_phones.html',db, auth.user )
 def edit_phone(contact_id=None):
     assert contact_id is not None
- 
+    #contact info
     contact = db.contact[contact_id]
     print(contact)
     rows = db(db.phone.contact_id ==contact.id).select();
@@ -108,13 +110,15 @@ def edit_phone(contact_id=None):
 def edit_phones(contact_id=None, phone_id=None):
     assert contact_id is not None
     assert phone_id is not None
+    #create contact and phone id
     contact = db.contact[contact_id]
     phone = db.phone[phone_id]
     
     
     if phone is None:
         redirect(URL('edit_phones', contact_id))
-        
+    
+    #form handler
     form = Form(
         [Field('phone_Number'), Field('phone_Name')],
         record=dict(phone_Number=phone.phone_Number, phone_name=phone.phone_Name), 
@@ -139,5 +143,6 @@ def edit_phones(contact_id=None, phone_id=None):
 def delete_phones(contact_id=None, phone_id=None):
     assert contact_id is not None
     assert phone_id is not None
+    #delete the phone id
     db(db.phone.id == phone_id).delete()
     redirect(URL('edit_phones', contact_id))
