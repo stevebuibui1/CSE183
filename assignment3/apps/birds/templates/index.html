@@ -1,50 +1,58 @@
 [[extend 'layout.html']]
-
+<html>
+<head>
+   <meta charset="utf-8">
+   <title>Birds</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+</head>
+<body>
 <div class="section">
-
-   <a class="button is-success" href="[[=URL('add')]]">
-     <span class="icon"><i class="fa fa-plus"></i></span>
-     <span>Add</span>
-   </a>
- 
-   <div class="container">
-     <table class="table is-striped is-fullwidth">
-       <tr>
-         <th>Bird Species</th>
-         <th>Weight</th>
-         <th>Diet</th>
-         <th>Habitat</th>
-         <th>Sightings</th>
-         <th>Users</th>
-         <th></th>
-         <th></th>
-       </tr>
-       [[for row in rows:]]
-       <tr>
-         <td>[[=row.bird]]</td>
-         <td>[[=row.weight]]</td>
-         <td>[[=row.diet]]</td>
-         <td>[[=row.habitat]]</td>
-         <td>[[=row.n_sightings]]</td>
-         <td>[[=row.user_email]]</td>
-         <td>
-           <a class="button" href="[[=URL('edit', row.id, signer=url_signer)]]">
-             <span class="icon"><i class="fa fa-fw fa-pencil"></i></span> <span>Edit</span>
-           </a>
-         </td>
-         <td>
-           <a class="button" href="[[=URL('inc', row.id, signer=url_signer)]]">
-             <span class="icon"><i class="fa fa-fw fa-plus"></i></span>
-           </a>
-         </td>
-         <td>
-               <a class="button" href="[[=URL('delete', row.id, signer=url_signer)]]">
-                  <span class="icon"><i class="fa fa-trash"></i></span>
-                  <span>Delete</span>
-               </a>
-            </td>
-       </tr>
-       [[pass]]
-     </table>
+   <!-- Put the table here -->
+   <div class="section">
+      <div class="is-mobile">
+         <h1 class = "title"><b>Bird</b></h1>
+      </div>
    </div>
- </div>
+   <a class="button is-success" href="[[=URL('add')]]">
+      <span class="icon"><i class="fa fa-plus"></i></span>
+      <span>Add Entry</span>
+   </a>
+   <table class="table is-striped">
+      <tr>
+         <th>bird</th>
+         <th>weight</th>
+         <th>diet</th>
+         <th>habitat</th>
+         <th>n_sightings</th>
+      </tr>
+      [[for item in info:]]
+      <tr>
+         <td>[[=item.bird]]</td>
+         <td>[[=item.weight]]</td>
+         <td>[[=item.diet]]</td>
+         <td>[[=item.habitat]]</td>
+         <td>[[=item.n_sightings]]</td>
+         <td>
+            <a class="button is-success" href="[[=URL('inc', item.id, signer=urlSigner)]]">
+               <span class="icon">
+                  <i class="fa fa-plus"></i>
+               </span>
+               <span>
+                  +1
+               </span>
+            </a>
+            <a class="button" href="[[=URL('edit', item.id, signer=urlSigner)]]">
+               <span class="icon"><i class="fa fa-fw fa-pencil"></i></span> <span>Edit your Entry</span>
+            </a>
+            <a class="button" href="[[=URL('del', item.id, signer=urlSigner)]]">
+               <span class="icon">
+                  <i class="fa fa-trash"></i>
+               </span>
+            </a>
+         </td>
+      </tr>
+      [[continue]]
+   </table>
+</div>
+</body>
+</html>
