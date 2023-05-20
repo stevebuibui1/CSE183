@@ -1,11 +1,10 @@
 """
 This file defines the database models
 """
+
 import datetime
-
+from .common import db, Field, auth, T
 from pydal.validators import *
-
-from .common import Field, auth, db
 
 
 def get_user_email():
@@ -13,31 +12,39 @@ def get_user_email():
 
 def get_time():
     return datetime.datetime.utcnow()
+
+
 ### Define your table below
 #
 # db.define_table('thing', Field('name'))
 #
 ## always commit your models to avoid problems later
-#
-# db.commit()
-#
+
 db.define_table(
     'contact',
-    Field('first_name', requires=IS_NOT_EMPTY()),
-    Field('last_name', requires=IS_NOT_EMPTY()),
-    Field('user_email', default=get_user_email)
+    Field('first_name',default="", requires=IS_NOT_EMPTY()),
+    Field('last_name',default="", requires=IS_NOT_EMPTY()),
+    Field('user_email', default=get_user_email),
 )
+
 
 db.define_table(
     'phone',
-    Field('contact_id', 'reference contact'),
-    Field('phone_Number'),
-    Field('phone_Name')
+    Field('contact_id', 'reference contact', ondelete="CASCADE"),
+    Field('phone_number', default="",requires=IS_NOT_EMPTY()),
+    Field('phone_name', default="",requires=IS_NOT_EMPTY()),
 )
 
+
+
+db.contact.first_name.label = T(" First Name ")
+db.contact.last_name.label = T(" Last Name ")
+
+
+
+
 db.contact.id.readable = db.contact.id.writable = False
-db.contact.user_email.readable = db.contact.user_email.writable = False
-db.phone.contact_id.readable = db.phone.contact_id.writable = False
+db.contact.user_email.readable = db.contact.user_email.writable  = False
 
 
 db.commit()

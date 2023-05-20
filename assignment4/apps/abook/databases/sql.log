@@ -1,4 +1,4 @@
-timestamp: 2023-05-04T21:28:07.992446
+timestamp: 2022-05-02T16:07:27.445222
 CREATE TABLE "py4web_session"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "rkey" CHAR(512),
@@ -8,7 +8,7 @@ CREATE TABLE "py4web_session"(
     "expires_on" TIMESTAMP
 );
 success!
-timestamp: 2023-05-04T21:28:08.000448
+timestamp: 2022-05-02T16:07:27.452187
 CREATE TABLE "auth_user"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "email" CHAR(512) UNIQUE,
@@ -21,14 +21,14 @@ CREATE TABLE "auth_user"(
     "past_passwords_hash" TEXT
 );
 success!
-timestamp: 2023-05-04T21:28:08.005448
+timestamp: 2022-05-02T16:07:27.456297
 CREATE TABLE "auth_user_tag_groups"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "tagpath" CHAR(512),
-    "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE ON UPDATE CASCADE  
+    "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  
 );
 success!
-timestamp: 2023-05-04T21:28:08.012447
+timestamp: 2022-05-02T16:16:36.442984
 CREATE TABLE "contact"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "first_name" CHAR(512),
@@ -36,11 +36,15 @@ CREATE TABLE "contact"(
     "user_email" CHAR(512)
 );
 success!
-timestamp: 2023-05-04T21:28:08.017447
+timestamp: 2022-05-02T16:53:53.892540
 CREATE TABLE "phone"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "contact_id" INTEGER REFERENCES "contact" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
+    "contact_id" INTEGER REFERENCES "contact" ("id") ON DELETE CASCADE  ,
     "phone_number" CHAR(512),
     "phone_name" CHAR(512)
 );
+success!
+success!
+success!
+success!
 success!

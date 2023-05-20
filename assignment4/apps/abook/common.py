@@ -3,19 +3,17 @@ This file defines cache, session, and translator T object for the app
 These are fixtures that every app needs so probably you will not be editing this file
 """
 import copy
-import logging
 import os
 import sys
-
-from py4web import DAL, Cache, Field, Flash, Session, Translator, action
+import logging
+from py4web import Session, Cache, Translator, Flash, DAL, Field, action
+from py4web.utils.mailer import Mailer
 from py4web.utils.auth import Auth
 from py4web.utils.downloader import downloader
+from pydal.tools.tags import Tags
 from py4web.utils.factories import ActionFactory
 from py4web.utils.form import FormStyleBulma
-from py4web.utils.mailer import Mailer
 from py4web.utils.url_signer import URLSigner
-from pydal.tools.tags import Tags
-
 from . import settings
 
 # #######################################################
@@ -71,9 +69,7 @@ elif settings.SESSION_TYPE == "redis":
     )
     session = Session(secret=settings.SESSION_SECRET_KEY, storage=conn)
 elif settings.SESSION_TYPE == "memcache":
-    import time
-
-    import memcache
+    import memcache, time
 
     conn = memcache.Client(settings.MEMCACHE_CLIENTS, debug=0)
     session = Session(secret=settings.SESSION_SECRET_KEY, storage=conn)
@@ -90,9 +86,9 @@ auth = Auth(session, db, define_tables=False)
 
 # Fixes the messages.
 auth_messages = copy.deepcopy(auth.MESSAGES)
-auth_messages["buttons"]["sign-in"] = "Log in"
-auth_messages["buttons"]["sign-up"] = "Sign up"
-auth_messages["buttons"]["lost-password"] = "Lost password"
+auth_messages['buttons']['sign-in'] = "Log in"
+auth_messages['buttons']['sign-up'] = "Sign up"
+auth_messages['buttons']['lost-password'] = "Lost password"
 
 # And button classes.
 auth_button_classes = {
@@ -158,8 +154,7 @@ if settings.OAUTH2GOOGLE_CLIENT_ID:
         )
     )
 if settings.OAUTH2FACEBOOK_CLIENT_ID:
-    from py4web.utils.auth_plugins.oauth2facebook import \
-        OAuth2Facebook  # UNTESTED
+    from py4web.utils.auth_plugins.oauth2facebook import OAuth2Facebook  # UNTESTED
 
     auth.register_plugin(
         OAuth2Facebook(
@@ -185,12 +180,10 @@ if settings.OAUTH2OKTA_CLIENT_ID:
 # files uploaded and reference by Field(type='upload')
 # #######################################################
 if settings.UPLOAD_FOLDER:
-
-    @action("download/<filename>")
+    @action('download/<filename>')
     @action.uses(db)
     def download(filename):
         return downloader(db, settings.UPLOAD_FOLDER, filename)
-
     # To take advantage of this in Form(s)
     # for every field of type upload you MUST specify:
     #

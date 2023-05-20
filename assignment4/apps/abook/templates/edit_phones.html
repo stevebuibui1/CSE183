@@ -1,39 +1,56 @@
 [[extend 'layout.html']]
+
 <div class="section">
-    <h1 class="title"> Phone Numbers for [[=contact.first_name]] [[=contact.last_name]]
-    </h1>
-   
-       
-        <table class="table is-striped is-fullwidth">
-            <tr>
-                <th>Phone</th>
-                <th>Kind</th>
-                <th></th>
-            </tr>
-            [[for row in rows:]]
-            <tr>
-                <td>[[= row.phone_Number]]</td>
-                <td>[[= row.phone_Name]]</td>
-                <td>
-                    <!-- The buttons of the edit phone-->
-                    <a class="button is-warning" href="[[=URL('edit_Phone', contact.id, row.id, signer=url_signer)]]">
-                    <span class="icon"><i class="fa fa-edit"></i></span>
-                    </a>
-                    <a class="button is-danger" href="[[=URL('delete_phone', contact.id, row.id, signer=url_signer)]]">
-                    <span class="icon"><i class="fa fa-trash"></i></span>
-                    </a>
-                </td>
-            </tr>
-            [[pass]]
-        </table>
-         <!-- The buttons to go back and add-->
-        <a class="button is-success" href="[[=URL('index')]]">
-        <span class="icon"><i class="fa fa-backward"></i></span>
+   <h1 class="title"> [[=currContact]]'s Phone Numbers </h1>
+
+    <table class="table is-striped is-fullwidth">
+        <tr>
+            <th>Phone Number</th>
+            <th>Kind</th>
+            <th> </th>
+        </tr>
+        [[for r in rows:]]
+        <tr>
+            <td> [[=r.phone.phone_number]]</td>
+            <td> [[=r.phone.phone_name]]</td>
+            <td>
+                <a class="button is-dark" href="[[=URL('edit_phone', r.contact.id,r.phone.id, signer=url_signer)]]" >
+                    <span class="icon">
+                      <i class="fa fa-fw fa-pencil"></i>
+                    </span>
+                </a>
+                <a class="button is-danger" href="[[=URL('delete_phone', r.contact.id,r.phone.id, signer=url_signer)]]" >
+                    <span class="icon">
+                      <i class="fa fa-fw fa-trash"></i>
+                    </span>
+                </a>
+
+            </td>
+
+
+        </tr>
+
+        [[pass]]
+
+    </table>
+
+
+    <a class="button is-info is-left" href="[[=URL('index')]]">
+        <span class="icon">
+            <i class="fa fa-arrow-left"></i>
+        </span>
         <span>Back</span>
-        </a>
-        <a class="button is-primary" href="[[=URL('add_phones', contact.id)]]">
-            <span class="icon"><i class="fa fa-plus"></i></span>
-            <span>Add Phone Number</span>
-        </a>
-</div>
-</section>
+
+    </a>
+
+    <a class="button is-warning is-left" href="[[=URL('add_phone', currID, signer=url_signer)]]">
+        <span class="icon">
+            <i class="fa fa-plus"></i>
+        </span>
+        <span>Add Number</span>
+
+    </a>
+
+
+
+ </div>
